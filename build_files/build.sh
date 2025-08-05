@@ -4,7 +4,7 @@ set -ouex pipefail
 
 curl -fsSL https://repo.librewolf.net/librewolf.repo > /etc/yum.repos.d/librewolf.repo
 
-GROUPS=(
+PKG_GROUPS=(
 kde-mobile
 kde-mobile-apps
 )
@@ -22,14 +22,14 @@ bubblejail
 fish
 )
 
+for i in ${PKG_GROUPS[@]}; do
+  dnf -y group install $i
+done
+
 for i in ${COPR_REPOS[@]}; do
   dnf -y copr enable $i
 done
 
 dnf5 -y install ${PACKAGES[@]}
-
-for i in ${GROUPS[@]}; do
-  dnf -y group install $i
-done
 
 systemctl enable podman.socket
