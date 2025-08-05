@@ -4,8 +4,10 @@ set -ouex pipefail
 
 curl -fsSL https://repo.librewolf.net/librewolf.repo > /etc/yum.repos.d/librewolf.repo
 
-dnf5 -y group install kde-mobile
-dnf5 -y group install kde-mobile-apps
+GROUPS=(
+kde-mobile
+kde-mobile-apps
+)
 
 COPR_REPOS=(
 ublue-os/packages
@@ -25,5 +27,9 @@ for i in ${COPR_REPOS[@]}; do
 done
 
 dnf5 -y install ${PACKAGES[@]}
+
+for i in ${GROUPS[@]}; do
+  dnf -y group install $i
+done
 
 systemctl enable podman.socket
